@@ -18,3 +18,7 @@ Content-Type: application/json
   "name": "Adrian Mouzinho",
   "email": "adrianmouzinho2@example.com"
 }
+
+### Get event
+
+GET http://localhost:3333/events/abce242c-fe72-4cf8-9804-9a0dfe1df2b4
