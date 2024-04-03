@@ -12,8 +12,13 @@ export async function createEvent(app: FastifyInstance) {
 			schema: {
 				body: z.object({
 					title: z.string().min(4),
-					details: z.string().nullable(),
-					maximumAttendees: z.number().int().positive().nullable(),
+					details: z.string().nullable().default(null),
+					maximumAttendees: z
+						.number()
+						.int()
+						.positive()
+						.nullable()
+						.default(null),
 				}),
 				response: {
 					201: z.object({
@@ -27,13 +32,13 @@ export async function createEvent(app: FastifyInstance) {
 
 			const slug = generateSlug(title)
 
-			const existingEvent = await prisma.event.findUnique({
+			const eventWithSameSlug = await prisma.event.findUnique({
 				where: {
 					slug,
 				},
 			})
 
-			if (existingEvent !== null) {
+			if (eventWithSameSlug !== null) {
 				reply.status(400)
 				throw new Error('Another event with same title already exists.')
 			}
