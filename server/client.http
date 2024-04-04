@@ -6,17 +6,17 @@ Content-Type: application/json
 {
   "title": "NLW Unite",
   "details": null,
-  "maximumAttendees": 1
+  "maximumAttendees": 2
 }
 
 ### Register attendee on event
 
-POST http://localhost:3333/events/7f4b2405-2589-43b4-b125-0ee90fce9f9f/register
+POST http://localhost:3333/events/7d07842f-d96c-46ca-896d-acf965b0035d/register
 Content-Type: application/json
 
 {
   "name": "Adrian Mouzinho",
-  "email": "adrianmouzinho2@example.com"
+  "email": "adrianmouzinho1@example.com"
 }
 
 ### Get event
