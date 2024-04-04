@@ -5,7 +5,11 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "tsx watch --env-file .env src/server.ts",
-		"db:seed": "prisma db seed"
+		"build": "tsup src --format esm",
+		"start": "node dist/server.mjs",
+		"db:migrate": "prisma migrate dev",
+		"db:seed": "prisma db seed",
+		"db:studio": "prisma studio"
 	},
 	"keywords": [],
 	"author": "",

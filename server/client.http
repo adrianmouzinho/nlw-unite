@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ### Get event
 
-GET http://localhost:3333/events/abce242c-fe72-4cf8-9804-9a0dfe1df2b4
+GET http://localhost:3333/events/9e9bd979-9d10-4915-b339-3786b1634f33
 
 ### Get attendee badge
 
@@ -33,4 +33,4 @@ GET http://localhost:3333/attendees/5/check-in
 
 ### Get event attendess
 
-GET http://localhost:3333/events/abce242c-fe72-4cf8-9804-9a0dfe1df2b4/attendees?query=adrian
+GET http://localhost:3333/events/9e9bd979-9d10-4915-b339-3786b1634f33/attendees?query=
