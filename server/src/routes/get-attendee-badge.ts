@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { prisma } from '../libs/prisma'
+import { BadRequest } from './_errors/bad-request'
 
 export async function getAttendeeBadge(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
@@ -45,8 +46,7 @@ export async function getAttendeeBadge(app: FastifyInstance) {
 			})
 
 			if (!attendee) {
-				reply.status(400)
-				throw new Error('Attendee not found.')
+				throw new BadRequest('Attendee not found.')
 			}
 
 			const baseURL = `${request.protocol}://${request.hostname}`

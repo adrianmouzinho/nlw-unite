@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { prisma } from '../libs/prisma'
+import { BadRequest } from './_errors/bad-request'
 
 export async function registerForEvent(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
@@ -46,8 +47,7 @@ export async function registerForEvent(app: FastifyInstance) {
 			])
 
 			if (!event) {
-				reply.status(400)
-				throw new Error('Event not found.')
+				throw new BadRequest('Event not found.')
 			}
 
 			const { name, email } = request.body
@@ -62,16 +62,16 @@ export async function registerForEvent(app: FastifyInstance) {
 			})
 
 			if (attendeeFromEmail !== null) {
-				reply.status(400)
-				throw new Error('This e-mail is already registered for this event.')
+				throw new BadRequest(
+					'This e-mail is already registered for this event.',
+				)
 			}
 
 			if (
 				event.maximumAttendees !== null &&
 				amountOfAttendeesForEvent >= event.maximumAttendees
 			) {
-				reply.status(400)
-				throw new Error(
+				throw new BadRequest(
 					'The maximum number of attendees for this event has been reached.',
 				)
 			}
