@@ -27,7 +27,7 @@ export async function getEventAttendees(app: FastifyInstance) {
 								name: z.string(),
 								email: z.string().email(),
 								createdAt: z.date(),
-								checkInAt: z.date().nullable(),
+								checkedInAt: z.date().nullable(),
 							}),
 						),
 						total: z.number(),
@@ -102,7 +102,7 @@ export async function getEventAttendees(app: FastifyInstance) {
 						name: attendee.name,
 						email: attendee.email,
 						createdAt: attendee.createdAt,
-						checkInAt: attendee.checkIn?.createdAt ?? null,
+						checkedInAt: attendee.checkIn?.createdAt ?? null,
 					}
 				}),
 				total,
