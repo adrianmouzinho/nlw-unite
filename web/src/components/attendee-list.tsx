@@ -12,6 +12,7 @@ import {
 	SearchIcon,
 } from 'lucide-react'
 import { type ChangeEvent, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 import { api } from '../libs/axios'
 import { IconButton } from './icon-button'
@@ -35,16 +36,20 @@ interface GetAttendeesResponse {
 }
 
 export function AttendeeList() {
-	const [search, setSearch] = useState('')
-	const [page, setPage] = useState(1)
+	const [searchParams, setSearchParams] = useSearchParams()
+
+	const [filter, setFilter] = useState(() => {
+		return searchParams.get('query') ?? ''
+	})
+
+	const page = Number(searchParams.get('page') ?? 1)
 
 	const { data, isLoading } = useQuery({
-		queryKey: ['get-attendees', page],
+		queryKey: ['get-attendees', page, filter],
 		queryFn: async () => {
 			const response = await api.get<GetAttendeesResponse>(
-				`http://localhost:3333/events/9e9bd979-9d10-4915-b339-3786b1634f33/attendees?pageIndex=${
-					page - 1
-				}`,
+				'/events/9e9bd979-9d10-4915-b339-3786b1634f33/attendees',
+				{ params: { pageIndex: page - 1, query: filter } },
 			)
 
 			return response.data
@@ -55,7 +60,14 @@ export function AttendeeList() {
 	const totalPages = Math.ceil((data?.total ?? 0) / 10)
 
 	function onSearchInputChanged(event: ChangeEvent<HTMLInputElement>) {
-		setSearch(event.target.value)
+		setFilter(event.target.value)
+
+		setSearchParams((params) => {
+			params.set('page', '1')
+			params.set('query', event.target.value)
+
+			return params
+		})
 	}
 
 	function goToNextPage() {
@@ -63,7 +75,11 @@ export function AttendeeList() {
 			return
 		}
 
-		setPage((prev) => prev + 1)
+		setSearchParams((params) => {
+			params.set('page', String(page + 1))
+
+			return params
+		})
 	}
 
 	function goToPreviousPage() {
@@ -71,7 +87,11 @@ export function AttendeeList() {
 			return
 		}
 
-		setPage((prev) => prev - 1)
+		setSearchParams((params) => {
+			params.set('page', String(page - 1))
+
+			return params
+		})
 	}
 
 	function goToFirstPage() {
@@ -79,7 +99,11 @@ export function AttendeeList() {
 			return
 		}
 
-		setPage(1)
+		setSearchParams((params) => {
+			params.set('page', '1')
+
+			return params
+		})
 	}
 
 	function goToLastPage() {
@@ -87,7 +111,11 @@ export function AttendeeList() {
 			return
 		}
 
-		setPage(totalPages)
+		setSearchParams((params) => {
+			params.set('page', String(totalPages))
+
+			return params
+		})
 	}
 
 	return (
@@ -102,6 +130,7 @@ export function AttendeeList() {
 						type="text"
 						name="search"
 						id="search"
+						value={filter}
 						onChange={onSearchInputChanged}
 						className="h-8 w-72 bg-transparent border border-white/10 text-sm pl-10 pr-3 rounded-lg outline-none ring-0 placeholder:text-zinc-300"
 						placeholder="Buscar participantes..."
@@ -148,7 +177,7 @@ export function AttendeeList() {
 									</TableCell>
 									<TableCell>{dayjs().to(attendee.createdAt)}</TableCell>
 									<TableCell>
-										{!attendee.checkedInAt ? (
+										{attendee.checkedInAt === null ? (
 											<span className="text-zinc-500">Não fez check-in</span>
 										) : (
 											dayjs().to(attendee.checkedInAt)
