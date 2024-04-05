@@ -2,20 +2,13 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import {
-	ChevronLeftIcon,
-	ChevronRightIcon,
-	ChevronsLeftIcon,
-	ChevronsRightIcon,
-	Loader2Icon,
-	MoreHorizontalIcon,
-	SearchIcon,
-} from 'lucide-react'
+import { Loader2Icon, MoreHorizontalIcon, SearchIcon } from 'lucide-react'
 import { type ChangeEvent, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { api } from '../libs/axios'
 import { IconButton } from './icon-button'
+import { Pagination } from './pagination'
 import { Table } from './table/table'
 import { TableCell } from './table/table-cell'
 import { TableHeader } from './table/table-header'
@@ -65,54 +58,6 @@ export function AttendeeList() {
 		setSearchParams((params) => {
 			params.set('page', '1')
 			params.set('query', event.target.value)
-
-			return params
-		})
-	}
-
-	function goToNextPage() {
-		if (page + 1 > totalPages) {
-			return
-		}
-
-		setSearchParams((params) => {
-			params.set('page', String(page + 1))
-
-			return params
-		})
-	}
-
-	function goToPreviousPage() {
-		if (page - 1 <= 0) {
-			return
-		}
-
-		setSearchParams((params) => {
-			params.set('page', String(page - 1))
-
-			return params
-		})
-	}
-
-	function goToFirstPage() {
-		if (page === 1) {
-			return
-		}
-
-		setSearchParams((params) => {
-			params.set('page', '1')
-
-			return params
-		})
-	}
-
-	function goToLastPage() {
-		if (page === totalPages) {
-			return
-		}
-
-		setSearchParams((params) => {
-			params.set('page', String(totalPages))
 
 			return params
 		})
@@ -193,44 +138,12 @@ export function AttendeeList() {
 						})}
 					</tbody>
 					{data?.attendees && (
-						<tfoot>
-							<tr>
-								<TableCell colSpan={3}>
-									Mostrando {data.attendees.length} de {data.total} itens
-								</TableCell>
-								<TableCell colSpan={3} className="text-right">
-									<div className="inline-flex items-center gap-8">
-										<span>
-											Página {page} de {totalPages}
-										</span>
-
-										<div className="flex gap-1.5">
-											<IconButton onClick={goToFirstPage} disabled={page === 1}>
-												<ChevronsLeftIcon className="size-4" />
-											</IconButton>
-											<IconButton
-												onClick={goToPreviousPage}
-												disabled={page === 1}
-											>
-												<ChevronLeftIcon className="size-4" />
-											</IconButton>
-											<IconButton
-												onClick={goToNextPage}
-												disabled={page === totalPages}
-											>
-												<ChevronRightIcon className="size-4" />
-											</IconButton>
-											<IconButton
-												onClick={goToLastPage}
-												disabled={page === totalPages}
-											>
-												<ChevronsRightIcon className="size-4" />
-											</IconButton>
-										</div>
-									</div>
-								</TableCell>
-							</tr>
-						</tfoot>
+						<Pagination
+							page={page}
+							totalPages={totalPages}
+							itemsPerPage={data.attendees.length}
+							totalItems={data.total}
+						/>
 					)}
 				</Table>
 			) : (
