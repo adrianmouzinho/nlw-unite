@@ -12,7 +12,7 @@ export function IconButton({ transparent = false, ...props }: IconButtonProps) {
 			className={
 				transparent
 					? 'bg-black/20 border border-white/10 rounded-md p-1.5 hover:bg-black/30 hover:text-white transition-opacity'
-					: 'bg-white/10 border border-white/10 rounded-md p-1.5 enabled:hover:bg-white/15 hover:text-white transition-opacity disabled:opacity-50'
+					: 'bg-white/10 border border-white/10 rounded-md p-1.5 enabled:hover:bg-white/15 enabled:hover:text-white transition-opacity disabled:opacity-50'
 			}
 		/>
 	)

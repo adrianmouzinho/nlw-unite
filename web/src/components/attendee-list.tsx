@@ -1,3 +1,6 @@
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import {
 	ChevronLeftIcon,
 	ChevronRightIcon,
@@ -6,14 +9,60 @@ import {
 	MoreHorizontalIcon,
 	SearchIcon,
 } from 'lucide-react'
+import { type ChangeEvent, useState } from 'react'
 
+import { attendees } from '../data/attendees'
 import { IconButton } from './icon-button'
 import { Table } from './table/table'
 import { TableCell } from './table/table-cell'
 import { TableHeader } from './table/table-header'
 import { TableRow } from './table/table-row'
 
+dayjs.extend(relativeTime)
+dayjs.locale('pt-br')
+
 export function AttendeeList() {
+	const [search, setSearch] = useState('')
+	const [page, setPage] = useState(1)
+
+	const totalPages = Math.ceil(attendees.length / 10)
+
+	function onSearchInputChanged(event: ChangeEvent<HTMLInputElement>) {
+		setSearch(event.target.value)
+	}
+
+	function goToNextPage() {
+		if (page + 1 > totalPages) {
+			return
+		}
+
+		setPage((prev) => prev + 1)
+	}
+
+	function goToPreviousPage() {
+		if (page - 1 <= 0) {
+			return
+		}
+
+		setPage((prev) => prev - 1)
+	}
+
+	function goToFirstPage() {
+		if (page === 1) {
+			return
+		}
+
+		setPage(1)
+	}
+
+	function goToLastPage() {
+		if (page === totalPages) {
+			return
+		}
+
+		setPage(totalPages)
+	}
+
 	return (
 		<div className="grid gap-4">
 			<div className="flex items-center gap-3">
@@ -26,6 +75,7 @@ export function AttendeeList() {
 						type="text"
 						name="search"
 						id="search"
+						onChange={onSearchInputChanged}
 						className="h-8 w-72 bg-transparent border border-white/10 text-sm pl-10 pr-3 rounded-lg outline-none ring-0 placeholder:text-zinc-300"
 						placeholder="Buscar participantes..."
 					/>
@@ -50,27 +100,26 @@ export function AttendeeList() {
 					</TableRow>
 				</thead>
 				<tbody>
-					{Array.from({ length: 10 }).map((_, i) => {
+					{attendees.slice((page - 1) * 10, page * 10).map((attendee) => {
 						return (
-							// biome-ignore lint: using index as key to test
-							<TableRow key={i}>
+							<TableRow key={attendee.id}>
 								<TableCell>
 									<input
 										type="checkbox"
 										className="size-4 bg-black/20 rounded border border-white/10 text-orange-400 focus:ring-orange-400"
 									/>
 								</TableCell>
-								<TableCell>143</TableCell>
+								<TableCell>{attendee.id}</TableCell>
 								<TableCell>
 									<div className="flex flex-col gap-1">
 										<span className="text-zinc-50 font-semibold">
-											Adrian Mouzinho
+											{attendee.name}
 										</span>
-										<span className="text-xs">adrianmouzinho@example.com</span>
+										<span className="text-xs">{attendee.email}</span>
 									</div>
 								</TableCell>
-								<TableCell>7 dias atrás</TableCell>
-								<TableCell>3 dias atrás</TableCell>
+								<TableCell>{dayjs().to(attendee.createdAt)}</TableCell>
+								<TableCell>{dayjs().to(attendee.checkedInAt)}</TableCell>
 								<TableCell>
 									<IconButton transparent>
 										<MoreHorizontalIcon className="size-4" />
@@ -82,22 +131,32 @@ export function AttendeeList() {
 				</tbody>
 				<tfoot>
 					<tr>
-						<TableCell colSpan={3}>Mostrando 10 de 228 itens</TableCell>
+						<TableCell colSpan={3}>
+							Mostrando 10 de {attendees.length} itens
+						</TableCell>
 						<TableCell colSpan={3} className="text-right">
 							<div className="inline-flex items-center gap-8">
-								<span>Página 1 de 11</span>
+								<span>
+									Página {page} de {totalPages}
+								</span>
 
 								<div className="flex gap-1.5">
-									<IconButton>
+									<IconButton onClick={goToFirstPage} disabled={page === 1}>
 										<ChevronsLeftIcon className="size-4" />
 									</IconButton>
-									<IconButton>
+									<IconButton onClick={goToPreviousPage} disabled={page === 1}>
 										<ChevronLeftIcon className="size-4" />
 									</IconButton>
-									<IconButton>
+									<IconButton
+										onClick={goToNextPage}
+										disabled={page === totalPages}
+									>
 										<ChevronRightIcon className="size-4" />
 									</IconButton>
-									<IconButton>
+									<IconButton
+										onClick={goToLastPage}
+										disabled={page === totalPages}
+									>
 										<ChevronsRightIcon className="size-4" />
 									</IconButton>
 								</div>
