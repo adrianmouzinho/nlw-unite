@@ -147,7 +147,7 @@ export function AttendeeList() {
 					)}
 				</Table>
 			) : (
-				<p className="text-center">
+				<p className="flex items-center gap-2 text-center justify-center">
 					<Loader2Icon className="h-5 w-5 animate-spin" /> Carregando
 					participantes
 				</p>
