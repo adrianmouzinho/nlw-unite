@@ -6,7 +6,7 @@ interface SearchInputProps extends ComponentProps<'input'> {}
 export function SearchInput(props: SearchInputProps) {
 	return (
 		<label className="relative">
-			<span className="sr-only">Buscar participantes</span>
+			<span className="sr-only">{props.placeholder}</span>
 			<input
 				{...props}
 				type="text"

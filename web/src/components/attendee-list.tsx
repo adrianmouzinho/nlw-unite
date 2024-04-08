@@ -2,13 +2,14 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { Loader2Icon, MoreHorizontalIcon, SearchIcon } from 'lucide-react'
+import { Loader2Icon, MoreHorizontalIcon } from 'lucide-react'
 import { type ChangeEvent, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { api } from '../libs/axios'
 import { IconButton } from './icon-button'
 import { Pagination } from './pagination'
+import { SearchInput } from './search-input'
 import { Table } from './table/table'
 import { TableCell } from './table/table-cell'
 import { TableHeader } from './table/table-header'
@@ -67,21 +68,11 @@ export function AttendeeList() {
 		<div className="grid gap-4">
 			<div className="flex items-center gap-3">
 				<h1 className="text-2xl leading-snug font-bold">Participantes</h1>
-				<div className="relative">
-					<label htmlFor="search" className="sr-only">
-						Buscar participantes
-					</label>
-					<input
-						type="text"
-						name="search"
-						id="search"
-						value={filter}
-						onChange={onSearchInputChanged}
-						className="h-8 w-72 bg-transparent border border-white/10 text-sm pl-10 pr-3 rounded-lg outline-none ring-0 placeholder:text-zinc-300"
-						placeholder="Buscar participantes..."
-					/>
-					<SearchIcon className="size-4 text-emerald-300 absolute top-2 left-3" />
-				</div>
+				<SearchInput
+					value={filter}
+					onChange={onSearchInputChanged}
+					placeholder="Buscar participantes..."
+				/>
 			</div>
 
 			{!isLoading ? (
