@@ -14,6 +14,7 @@ import { createEvent } from './routes/create-event'
 import { getAttendeeBadge } from './routes/get-attendee-badge'
 import { getEvent } from './routes/get-event'
 import { getEventAttendees } from './routes/get-event-attendees'
+import { getEvents } from './routes/get-events'
 import { registerForEvent } from './routes/register-for-event'
 
 const app = fastify()
@@ -49,6 +50,7 @@ app.register(getEvent)
 app.register(getAttendeeBadge)
 app.register(checkIn)
 app.register(getEventAttendees)
+app.register(getEvents)
 
 app.setErrorHandler(errorHandler)
 
