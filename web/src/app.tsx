@@ -1,11 +1,13 @@
-import { AttendeeList } from './components/attendee-list'
-import { Header } from './components/header'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { RouterProvider } from 'react-router-dom'
+
+import { queryClient } from './libs/react-query'
+import { router } from './routes'
 
 export function App() {
 	return (
-		<div className="max-w-[1264px] mx-auto px-6 py-5 grid gap-5">
-			<Header />
-			<AttendeeList />
-		</div>
+		<QueryClientProvider client={queryClient}>
+			<RouterProvider router={router} />
+		</QueryClientProvider>
 	)
 }
