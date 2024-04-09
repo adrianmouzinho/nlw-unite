@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 
-import { IconButton } from './icon-button'
+import { IconButton } from './ui/icon-button'
 import { TableCell } from './ui/table/table-cell'
 
 interface PaginationProps {
