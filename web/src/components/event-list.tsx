@@ -1,16 +1,19 @@
+import * as Dialog from '@radix-ui/react-dialog'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Loader2Icon, MoreHorizontalIcon, PlusIcon } from 'lucide-react'
 import { type ChangeEvent, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { api } from '../libs/axios'
+import { CreateEventForm } from './create-event-form'
 import { IconButton } from './icon-button'
 import { Pagination } from './pagination'
 import { SearchInput } from './search-input'
-import { Table } from './table/table'
-import { TableCell } from './table/table-cell'
-import { TableHeader } from './table/table-header'
-import { TableRow } from './table/table-row'
+import { Button } from './ui/button'
+import { Table } from './ui/table/table'
+import { TableCell } from './ui/table/table-cell'
+import { TableHeader } from './ui/table/table-header'
+import { TableRow } from './ui/table/table-row'
 
 interface GetEventsResponse {
 	events: {
@@ -45,7 +48,7 @@ export function EventList() {
 		placeholderData: keepPreviousData,
 	})
 
-	const totalPages = Math.ceil(data?.total ?? 0 / 10)
+	const totalPages = Math.ceil((data?.total ?? 0) / 10)
 
 	function onSearchInputChanged(event: ChangeEvent<HTMLInputElement>) {
 		setFilter(event.target.value)
@@ -70,13 +73,31 @@ export function EventList() {
 					/>
 				</div>
 
-				<button
-					type="button"
-					className="h-9 flex items-center gap-2 text-sm font-semibold text-black bg-orange-400 rounded-lg px-3"
-				>
-					<PlusIcon className="size-4" />
-					Novo evento
-				</button>
+				<Dialog.Root>
+					<Dialog.Trigger asChild>
+						<Button primary>
+							<PlusIcon className="size-3" />
+							Novo evento
+						</Button>
+					</Dialog.Trigger>
+
+					<Dialog.Portal>
+						<Dialog.Overlay className="fixed inset-0 bg-black/70" />
+						<Dialog.Content className="fixed space-y-10 p-10 right-0 top-0 bottom-0 h-screen min-w-[320px] z-10 bg-zinc-950 border-l border-zinc-900">
+							<div className="space-y-3">
+								<Dialog.Title className="text-xl font-bold">
+									Criar evento
+								</Dialog.Title>
+								<Dialog.Description className="text-sm text-zinc-500">
+									Após criar um evento, você poderá cadastrar novos
+									participantes.
+								</Dialog.Description>
+							</div>
+
+							<CreateEventForm />
+						</Dialog.Content>
+					</Dialog.Portal>
+				</Dialog.Root>
 			</div>
 
 			{!isLoading ? (
@@ -108,18 +129,22 @@ export function EventList() {
 									</TableCell>
 									<TableCell>
 										<div className="flex flex-col gap-1">
-											<span className="text-zinc-50 font-semibold">
+											<span className="text-zinc-50 font-semibold truncate">
 												{event.title}
 											</span>
 											<span className="text-xs">{event.id}</span>
 										</div>
 									</TableCell>
 									<TableCell className="truncate">
-										{event.details === null ? '-' : event.details}
+										{!event.details ? (
+											<span className="text-zinc-500">Sem detalhes</span>
+										) : (
+											event.details
+										)}
 									</TableCell>
 									<TableCell>
-										{event.maximumAttendees === null
-											? 'vagas ilimitadas'
+										{!event.maximumAttendees
+											? 'Sem limite'
 											: event.maximumAttendees}
 									</TableCell>
 									<TableCell>{event.attendeesAmount}</TableCell>
