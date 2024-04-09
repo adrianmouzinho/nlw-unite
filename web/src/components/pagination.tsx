@@ -7,7 +7,7 @@ import {
 import { useSearchParams } from 'react-router-dom'
 
 import { IconButton } from './icon-button'
-import { TableCell } from './table/table-cell'
+import { TableCell } from './ui/table/table-cell'
 
 interface PaginationProps {
 	page: number

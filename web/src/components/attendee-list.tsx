@@ -10,10 +10,10 @@ import { api } from '../libs/axios'
 import { IconButton } from './icon-button'
 import { Pagination } from './pagination'
 import { SearchInput } from './search-input'
-import { Table } from './table/table'
-import { TableCell } from './table/table-cell'
-import { TableHeader } from './table/table-header'
-import { TableRow } from './table/table-row'
+import { Table } from './ui/table/table'
+import { TableCell } from './ui/table/table-cell'
+import { TableHeader } from './ui/table/table-header'
+import { TableRow } from './ui/table/table-row'
 
 dayjs.extend(relativeTime)
 dayjs.locale('pt-br')
