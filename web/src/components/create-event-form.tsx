@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Check, Loader2, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { api } from '../libs/axios'
@@ -66,6 +67,8 @@ export function CreateEventForm() {
 		maximumAttendees,
 	}: CreateEventSchema) {
 		await mutateAsync({ title, details, maximumAttendees })
+
+		toast.success('Evento criado com sucesso!')
 	}
 
 	return (
