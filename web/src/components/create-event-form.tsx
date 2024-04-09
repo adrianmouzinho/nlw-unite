@@ -15,7 +15,7 @@ import { TextArea } from './ui/text-area'
 const createEventSchema = z.object({
 	title: z
 		.string()
-		.min(3, { message: 'O título precisa ter no mínimo 4 caracteres.' }),
+		.min(4, { message: 'O título precisa ter no mínimo 4 caracteres.' }),
 	details: z.string().nullable().default(null),
 	maximumAttendees: z.coerce
 		.number()
