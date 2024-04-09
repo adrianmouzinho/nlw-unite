@@ -16,7 +16,16 @@ const createEventSchema = z.object({
 		.string()
 		.min(3, { message: 'O título precisa ter no mínimo 4 caracteres.' }),
 	details: z.string().nullable().default(null),
-	maximumAttendees: z.number().int().positive().nullable().default(null),
+	maximumAttendees: z.coerce
+		.number()
+		.int({
+			message: 'O número de participantes precisa ser um valor inteiro.',
+		})
+		.positive({
+			message: 'O número de participantes precisa ser um valor maior que 0.',
+		})
+		.nullable()
+		.default(null),
 })
 
 type CreateEventSchema = z.infer<typeof createEventSchema>
@@ -75,7 +84,16 @@ export function CreateEventForm() {
 				<Label htmlFor="maximumAttendees">
 					Número de participantes (opcional)
 				</Label>
-				<Input id="maximumAttendees" type="number" />
+				<Input
+					{...register('maximumAttendees')}
+					id="maximumAttendees"
+					type="number"
+				/>
+				{formState.errors?.maximumAttendees && (
+					<p className="text-sm text-red-400">
+						{formState.errors?.maximumAttendees.message}
+					</p>
+				)}
 			</div>
 
 			<div className="space-y-2">
