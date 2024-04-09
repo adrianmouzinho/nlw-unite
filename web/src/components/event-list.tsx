@@ -1,6 +1,14 @@
 import * as Dialog from '@radix-ui/react-dialog'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { Loader2Icon, MoreHorizontalIcon, PlusIcon } from 'lucide-react'
+import {
+	Loader2Icon,
+	MoreHorizontalIcon,
+	PencilIcon,
+	PlusIcon,
+	Trash2Icon,
+	UsersRoundIcon,
+} from 'lucide-react'
 import { type ChangeEvent, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
@@ -149,9 +157,33 @@ export function EventList() {
 									</TableCell>
 									<TableCell>{event.attendeesAmount}</TableCell>
 									<TableCell>
-										<IconButton transparent>
-											<MoreHorizontalIcon className="size-4" />
-										</IconButton>
+										<DropdownMenu.Root>
+											<DropdownMenu.Trigger asChild>
+												<IconButton transparent>
+													<MoreHorizontalIcon className="size-4" />
+												</IconButton>
+											</DropdownMenu.Trigger>
+
+											<DropdownMenu.Portal>
+												<DropdownMenu.Content
+													className="bg-zinc-950 border border-white/10 rounded-lg p-1 text-sm"
+													sideOffset={6}
+												>
+													<DropdownMenu.Item className="flex items-center gap-1.5 py-1.5 px-2 rounded outline-none hover:bg-white/10 transition-colors">
+														<UsersRoundIcon className="size-3" />
+														Ver participantes
+													</DropdownMenu.Item>
+													<DropdownMenu.Item className="flex items-center gap-1.5 py-1.5 px-2 rounded outline-none hover:bg-white/10 transition-colors">
+														<PencilIcon className="size-3" />
+														Editar evento
+													</DropdownMenu.Item>
+													<DropdownMenu.Item className="flex items-center gap-1.5 py-1.5 px-2 rounded outline-none hover:bg-white/10 transition-colors text-red-400">
+														<Trash2Icon className="size-3" />
+														Deletar evento
+													</DropdownMenu.Item>
+												</DropdownMenu.Content>
+											</DropdownMenu.Portal>
+										</DropdownMenu.Root>
 									</TableCell>
 								</TableRow>
 							)
