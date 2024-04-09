@@ -19,7 +19,7 @@ import { TableRow } from './ui/table/table-row'
 
 interface GetEventsResponse {
 	events: {
-		id: number
+		id: string
 		title: string
 		details: string | null
 		slug: string
@@ -85,7 +85,7 @@ export function EventList() {
 
 					<Dialog.Portal>
 						<Dialog.Overlay className="fixed inset-0 bg-black/70" />
-						<Dialog.Content className="fixed space-y-10 p-10 right-0 top-0 bottom-0 h-screen min-w-[320px] z-10 bg-zinc-950 border-l border-zinc-900">
+						<Dialog.Content className="fixed space-y-10 p-10 right-0 top-0 bottom-0 h-screen max-w-sm z-10 bg-zinc-950 border-l border-zinc-900">
 							<div className="space-y-3">
 								<Dialog.Title className="text-xl font-bold">
 									Criar evento
