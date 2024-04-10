@@ -6,7 +6,7 @@ import { PencilIcon, Trash2Icon, UsersRoundIcon } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { api } from '../libs/axios'
-import { EditeEventForm } from './edit-event-form'
+import { EditEventForm } from './edit-event-form'
 import { Button } from './ui/button'
 
 interface EventDropdownMenuProps {
@@ -68,7 +68,7 @@ export function EventDropdownMenu({ eventId }: EventDropdownMenuProps) {
 								</Dialog.Description>
 							</div>
 
-							<EditeEventForm eventId={eventId} />
+							<EditEventForm eventId={eventId} />
 						</Dialog.Content>
 					</Dialog.Portal>
 				</Dialog.Root>
