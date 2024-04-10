@@ -12,6 +12,7 @@ import { errorHandler } from './error-handler'
 import { checkIn } from './routes/check-in'
 import { createEvent } from './routes/create-event'
 import { deleteEvent } from './routes/delete-event'
+import { editEvent } from './routes/edit-event'
 import { getAttendeeBadge } from './routes/get-attendee-badge'
 import { getEvent } from './routes/get-event'
 import { getEventAttendees } from './routes/get-event-attendees'
@@ -53,6 +54,7 @@ app.register(checkIn)
 app.register(getEventAttendees)
 app.register(getEvents)
 app.register(deleteEvent)
+app.register(editEvent)
 
 app.setErrorHandler(errorHandler)
 
