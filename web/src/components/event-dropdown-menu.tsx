@@ -4,6 +4,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PencilIcon, Trash2Icon, UsersRoundIcon } from 'lucide-react'
 import { toast } from 'sonner'
+import { Link } from 'react-router-dom'
 
 import { api } from '../libs/axios'
 import { EditEventForm } from './edit-event-form'
@@ -39,10 +40,12 @@ export function EventDropdownMenu({ eventId }: EventDropdownMenuProps) {
 				className="bg-zinc-950 border border-white/10 rounded-lg p-1 text-sm"
 				sideOffset={6}
 			>
-				<DropdownMenu.Item className="flex items-center gap-1.5 py-1.5 px-2 rounded outline-none hover:bg-white/10 transition-colors">
-					<UsersRoundIcon className="size-3" />
-					Ver participantes
-				</DropdownMenu.Item>
+				<Link to={`/${eventId}`}>
+					<DropdownMenu.Item className="flex items-center gap-1.5 py-1.5 px-2 rounded outline-none hover:bg-white/10 transition-colors">
+						<UsersRoundIcon className="size-3" />
+						Ver participantes
+					</DropdownMenu.Item>
+				</Link>
 
 				<Dialog.Root>
 					<Dialog.Trigger asChild>

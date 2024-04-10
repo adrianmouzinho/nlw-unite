@@ -12,12 +12,12 @@ export const router = createBrowserRouter([
 		errorElement: <NotFound />,
 		children: [
 			{
-				path: '/attendees',
-				element: <Attendees />,
+				path: '/',
+				element: <Events />,
 			},
 			{
-				path: '/events',
-				element: <Events />,
+				path: '/:eventId',
+				element: <Attendees />,
 			},
 		],
 	},

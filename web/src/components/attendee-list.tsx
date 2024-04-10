@@ -4,7 +4,7 @@ import 'dayjs/locale/pt-br'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Loader2Icon, MoreHorizontalIcon } from 'lucide-react'
 import { type ChangeEvent, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 import { api } from '../libs/axios'
 import { Pagination } from './pagination'
@@ -29,7 +29,13 @@ interface GetAttendeesResponse {
 	total: number
 }
 
+type Params = {
+	eventId: string
+}
+
 export function AttendeeList() {
+	const { eventId } = useParams<Params>()
+
 	const [searchParams, setSearchParams] = useSearchParams()
 
 	const [filter, setFilter] = useState(() => {
@@ -38,11 +44,11 @@ export function AttendeeList() {
 
 	const page = Number(searchParams.get('page') ?? 1)
 
-	const { data, isLoading } = useQuery({
-		queryKey: ['get-attendees', page, filter],
+	const { data, isLoading, isError } = useQuery({
+		queryKey: ['get-attendees', page, filter, eventId],
 		queryFn: async () => {
 			const response = await api.get<GetAttendeesResponse>(
-				'/events/9e9bd979-9d10-4915-b339-3786b1634f33/attendees',
+				`/events/${eventId}/attendees`,
 				{ params: { pageIndex: page - 1, query: filter } },
 			)
 
@@ -63,6 +69,7 @@ export function AttendeeList() {
 			return params
 		})
 	}
+	
 
 	return (
 		<div className="grid gap-4">
@@ -75,74 +82,102 @@ export function AttendeeList() {
 				/>
 			</div>
 
-			{!isLoading ? (
-				<Table>
-					<thead>
+			<Table>
+				<thead>
+					<TableRow>
+						<TableHeader className="w-12">
+							<input
+								type="checkbox"
+								className="size-4 bg-black/20 rounded border border-white/10 text-orange-400 focus:ring-orange-400"
+							/>
+						</TableHeader>
+						<TableHeader>Código</TableHeader>
+						<TableHeader>Participante</TableHeader>
+						<TableHeader>Data de inscrição</TableHeader>
+						<TableHeader>Data do check-in</TableHeader>
+						<TableHeader className="w-16"></TableHeader>
+					</TableRow>
+				</thead>
+				<tbody>
+					{isLoading && !data && (
 						<TableRow>
-							<TableHeader className="w-12">
-								<input
-									type="checkbox"
-									className="size-4 bg-black/20 rounded border border-white/10 text-orange-400 focus:ring-orange-400"
-								/>
-							</TableHeader>
-							<TableHeader>Código</TableHeader>
-							<TableHeader>Participante</TableHeader>
-							<TableHeader>Data de inscrição</TableHeader>
-							<TableHeader>Data do check-in</TableHeader>
-							<TableHeader className="w-16"></TableHeader>
+							<TableCell
+								colSpan={6}
+								className="py-10 text-center text-zinc-500"
+							>
+								<p className="flex items-center gap-2 text-center justify-center">
+									<Loader2Icon className="h-5 w-5 animate-spin" /> Carregando participantes
+								</p>
+							</TableCell>
 						</TableRow>
-					</thead>
-					<tbody>
-						{data?.attendees.map((attendee) => {
-							return (
-								<TableRow key={attendee.id}>
-									<TableCell>
-										<input
-											type="checkbox"
-											className="size-4 bg-black/20 rounded border border-white/10 text-orange-400 focus:ring-orange-400"
-										/>
-									</TableCell>
-									<TableCell>{attendee.id}</TableCell>
-									<TableCell>
-										<div className="flex flex-col gap-1">
-											<span className="text-zinc-50 font-semibold">
-												{attendee.name}
-											</span>
-											<span className="text-xs">{attendee.email}</span>
-										</div>
-									</TableCell>
-									<TableCell>{dayjs().to(attendee.createdAt)}</TableCell>
-									<TableCell>
-										{attendee.checkedInAt === null ? (
-											<span className="text-zinc-500">Não fez check-in</span>
-										) : (
-											dayjs().to(attendee.checkedInAt)
-										)}
-									</TableCell>
-									<TableCell>
-										<IconButton transparent>
-											<MoreHorizontalIcon className="size-4" />
-										</IconButton>
-									</TableCell>
-								</TableRow>
-							)
-						})}
-					</tbody>
-					{data?.attendees && (
-						<Pagination
-							page={page}
-							totalPages={totalPages}
-							itemsPerPage={data.attendees.length}
-							totalItems={data.total}
-						/>
 					)}
-				</Table>
-			) : (
-				<p className="flex items-center gap-2 text-center justify-center">
-					<Loader2Icon className="h-5 w-5 animate-spin" /> Carregando
-					participantes
-				</p>
-			)}
+
+					{data && data.attendees.length === 0 && (
+						<TableRow>
+							<TableCell
+								colSpan={6}
+								className="py-10 text-center text-zinc-500"
+							>
+								Nenhum resultado encontrado.
+							</TableCell>
+						</TableRow>
+					)}
+
+					{data && data.attendees.map((attendee) => {
+						return (
+							<TableRow key={attendee.id}>
+								<TableCell>
+									<input
+										type="checkbox"
+										className="size-4 bg-black/20 rounded border border-white/10 text-orange-400 focus:ring-orange-400"
+									/>
+								</TableCell>
+								<TableCell>{attendee.id}</TableCell>
+								<TableCell>
+									<div className="flex flex-col gap-1">
+										<span className="text-zinc-50 font-semibold">
+											{attendee.name}
+										</span>
+										<span className="text-xs">{attendee.email}</span>
+									</div>
+								</TableCell>
+								<TableCell>{dayjs().to(attendee.createdAt)}</TableCell>
+								<TableCell>
+									{attendee.checkedInAt === null ? (
+										<span className="text-zinc-500">Não fez check-in</span>
+									) : (
+										dayjs().to(attendee.checkedInAt)
+									)}
+								</TableCell>
+								<TableCell>
+									<IconButton transparent>
+										<MoreHorizontalIcon className="size-4" />
+									</IconButton>
+								</TableCell>
+							</TableRow>
+						)
+					})}
+
+					{!isLoading && isError && (
+						<TableRow>
+							<TableCell
+								colSpan={6}
+								className="py-10 text-center text-zinc-500"
+							>
+								Não foi possível carregar os participantes desse evento.
+							</TableCell>
+						</TableRow>
+					)}
+				</tbody>
+				{data && data.attendees.length > 0 && (
+					<Pagination
+						page={page}
+						totalPages={totalPages}
+						itemsPerPage={data.attendees.length}
+						totalItems={data.total}
+					/>
+				)}
+			</Table>
 		</div>
 	)
 }
