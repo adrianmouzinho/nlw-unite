@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 import { NotFound } from './pages/404'
 import { AppLayout } from './pages/_layouts/app'
@@ -12,11 +12,15 @@ export const router = createBrowserRouter([
 		errorElement: <NotFound />,
 		children: [
 			{
-				path: '/',
+				index: true,
+				element: <Navigate replace to='events/' />,
+			},
+			{
+				path: 'events/',
 				element: <Events />,
 			},
 			{
-				path: '/:eventId',
+				path: 'events/:eventId/attendees',
 				element: <Attendees />,
 			},
 		],

@@ -7,7 +7,7 @@ export function Header() {
 			<img src={nlwUniteIcon} alt="Ícone do pass.in" />
 
 			<nav className="flex items-center gap-5">
-				<NavLink to="/">Eventos</NavLink>
+				<NavLink to="/events">Eventos</NavLink>
 			</nav>
 		</header>
 	)
