@@ -40,10 +40,10 @@ export function EventDropdownMenu({ eventId }: EventDropdownMenuProps) {
 				className="bg-zinc-950 border border-white/10 rounded-lg p-1 text-sm"
 				sideOffset={6}
 			>
-				<Link to={`/${eventId}`}>
+				<Link to={`/events/${eventId}/attendees`}>
 					<DropdownMenu.Item className="flex items-center gap-1.5 py-1.5 px-2 rounded outline-none hover:bg-white/10 transition-colors">
 						<UsersRoundIcon className="size-3" />
-						Ver participantes
+						Participantes
 					</DropdownMenu.Item>
 				</Link>
 
