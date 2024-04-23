@@ -1,9 +1,12 @@
 import { Ticket } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import logoNlwUnite from '../assets/logo-nlw-unite.svg'
 import { Button } from '../components/button'
 import { Input } from '../components/input'
 
 export function GetTicket() {
+	const navigate = useNavigate()
+
 	return (
 		<form className="max-w-[335px] w-full flex flex-col items-center gap-8">
 			<img src={logoNlwUnite} alt="Logo do NLW Unite" />
@@ -15,8 +18,10 @@ export function GetTicket() {
 					name="code"
 					placeholder="Código do ingresso"
 				/>
-				<Button>Acessar credencial</Button>
-				<Button transparent>Ainda não possui ingresso?</Button>
+				<Button type="submit">Acessar credencial</Button>
+				<Button transparent onClick={() => navigate('/register')}>
+					Ainda não possui ingresso?
+				</Button>
 			</div>
 		</form>
 	)
