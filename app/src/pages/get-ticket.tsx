@@ -11,7 +11,7 @@ export function GetTicket() {
 			<div className="w-full flex flex-col gap-3">
 				<Input
 					icon={<Ticket className="size-5 text-teal-200" />}
-					aria-label="Acessar credencial"
+					aria-label="Código do ingresso"
 					name="code"
 					placeholder="Código do ingresso"
 				/>
